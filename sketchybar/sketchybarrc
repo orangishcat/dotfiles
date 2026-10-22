@@ -75,8 +75,8 @@ for sid in "${SPACE_SIDS[@]}"; do
                      label.font="sketchybar-app-font:Regular:18.0" \
                      label.padding_right=20 \
                      label.y_offset=-2 \
-                     label.color="$COLOR_ROSE" \
-                     icon.color="$COLOR_ROSE" \
+                     label.color="$COLOR_SPACE_SEL_FG" \
+                     icon.color="$COLOR_SPACE_SEL_FG" \
                      click_script="yabai -m space --focus $sid" \
                      script="$PLUGIN_DIR/space.sh"
 done
