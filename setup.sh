@@ -40,20 +40,6 @@ echo "--- Window corners ---"
 # macOS 27 lets you override the window corner radius (0 resets to the default of 20)
 defaults write -g NSConvolutionOverride1 -float 10
 
-# ── Fish as default shell ─────────────────────────────────────────────────────
-echo "--- Fish shell ---"
-FISH_PATH="$(brew --prefix)/bin/fish"
-if ! grep -qF "$FISH_PATH" /etc/shells; then
-    echo "$FISH_PATH" | sudo tee -a /etc/shells
-fi
-if [ "$SHELL" != "$FISH_PATH" ]; then
-    chsh -s "$FISH_PATH"
-fi
-
-# ── Fisher plugins (reads from fish/fish_plugins) ─────────────────────────────
-echo "--- Fisher plugins ---"
-fish -c "fisher update"
-
 # ── Script permissions ────────────────────────────────────────────────────────
 echo "--- Script permissions ---"
 chmod +x "$HOME/.config/switch-theme.sh"
