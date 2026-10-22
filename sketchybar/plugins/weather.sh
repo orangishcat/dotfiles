@@ -9,10 +9,8 @@ for i in {1..30}; do
 done
 
 source "$(dirname "$0")/../sketchybar_env"
-LOCATION_DATA=$(curl -sf "http://ip-api.com/json")
-LAT=$(echo "$LOCATION_DATA" | jq -r '.lat')
-LON=$(echo "$LOCATION_DATA" | jq -r '.lon')
-URL="https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric"
+read LAT LON <<< "$(corelocationcli -once -format '%latitude %longitude')"
+URL="https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=imperial"
 
 DATA=$(curl -sf "$URL")
 if [ -z "$DATA" ]; then
@@ -23,6 +21,7 @@ fi
 TEMP=$(echo "$DATA" | jq '.main.temp' | cut -d "." -f 1)
 CONDITION=$(echo "$DATA" | jq -r '.weather[0].main')
 CONDITION_DESC=$(echo "$DATA" | jq -r '.weather[0].description')
+SUNSET=$(echo "$DATA" | jq -r '.sys.sunset // 0')
 
 case "$CONDITION_DESC" in
   "few clouds") ICON="􀇕" ;;
@@ -32,7 +31,12 @@ case "$CONDITION_DESC" in
       Drizzle)      ICON="􀇅" ;;
       Rain)         ICON="􀇇" ;;
       Snow)         ICON="􀇏" ;;
-      Clear)        ICON="􀆮" ;;
+      Clear)
+        ICON="􀆮"
+        if [ "$SUNSET" -gt 0 ] && [ "$(date +%s)" -gt "$SUNSET" ]; then
+          ICON="􀆺"
+        fi
+        ;;
       Clouds)       ICON="􀇃" ;;
       Mist|Fog|Haze|Smoke|Dust|Ash|Sand) ICON="􀇣" ;;
       *)            ICON="􀁝" ;;
@@ -40,4 +44,4 @@ case "$CONDITION_DESC" in
     ;;
 esac
 
-sketchybar --animate tanh 10 --set weather label="$ICON  ${TEMP}°C"
+sketchybar --animate tanh 10 --set weather label="$ICON  ${TEMP}°F"
