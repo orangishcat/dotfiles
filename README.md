@@ -8,3 +8,4 @@ What I changed:
 - Keep `zsh` as default shell
 - Keep `iTerm` as my terminal
 - Use `corelocationcli` rather than IP geolocation for location data
+- Use Raycast (rather than Karabiner) to rebind `Caps Lock` to `Ctrl+Opt+Cmd`
