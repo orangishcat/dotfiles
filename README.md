@@ -7,3 +7,4 @@ What I changed:
 - Alternate between purple and iris colors in space tabs
 - Keep `zsh` as default shell
 - Keep `iTerm` as my terminal
+- Use `corelocationcli` rather than IP geolocation for location data
