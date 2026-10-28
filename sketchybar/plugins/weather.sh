@@ -24,7 +24,12 @@ CONDITION_DESC=$(echo "$DATA" | jq -r '.weather[0].description')
 SUNSET=$(echo "$DATA" | jq -r '.sys.sunset // 0')
 
 case "$CONDITION_DESC" in
-  "few clouds") ICON="􀇕" ;;
+  "few clouds")
+    ICON="􀇕"
+    if [ "$SUNSET" -gt 0 ] && [ "$(date +%s)" -gt "$SUNSET" ]; then
+      ICON="􀇛"
+    fi
+    ;;
   *)
     case "$CONDITION" in
       Thunderstorm) ICON="􀇟" ;;
